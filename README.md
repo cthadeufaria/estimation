@@ -1,2 +1,2 @@
 # estimation
-Estimation and Decision Systems FEUP laboratory lectures.
+Estimation and Decision Systems' FEUP lab lectures code solutions.
