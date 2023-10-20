@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from linear_estimator import LinearEstimator
+from estimator import Estimator
 
-def run_estimator_1():
+def main():
     sigma = 4
     i = 2000
     e1 = np.random.normal(0, np.sqrt(sigma), i) # Generate a random signal for testing
@@ -28,9 +28,8 @@ def run_estimator_1():
     plt.tight_layout()
     plt.show()
 
-def main():
-    run_estimator_1()
+    est.check_white_noise(e1)
 
 if __name__ == '__main__':
-    est = LinearEstimator()
+    est = Estimator()
     main()

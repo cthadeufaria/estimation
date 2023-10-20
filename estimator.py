@@ -1,9 +1,12 @@
 import numpy as np
 from scipy.signal import correlate # type: ignore
+from pandas.plotting import autocorrelation_plot # type: ignore
+from scipy.stats import chi2 # type: ignore
+import matlab.engine # type: ignore
 
-class LinearEstimator:
+class Estimator:
     def __init__(self) -> None:
-        pass
+        self.eng = matlab.engine.start_matlab()
 
     def calculate_autocovariance_and_spectral_density(self, e, τmax, ω):
         N = len(e)  # Length of the input signal
@@ -40,3 +43,25 @@ class LinearEstimator:
             phi[k] = np.sum(np.cos(w[k] * lags) * lambda_)
 
         return lambda_, lags, phi
+
+    def whiteness_test(e, τmax, alpha):
+        N = len(e)  # Length of the input signal
+
+        # Calculate the normalized autocovariance sequence s(τ)
+        s = np.correlate(e, e, mode='full') / (N * np.var(e))
+        
+        # Create a lag vector τ
+        τ = np.arange(-τmax, τmax + 1)
+        
+        # Calculate the Ljung-Box test statistic Q
+        Q = N * (N + 2) * np.sum(s**2 / (N - τ))
+        
+        # Calculate the critical value (confidence interval limit) kα
+        df = τmax
+        k_alpha = chi2.ppf(1 - alpha, df)
+        
+        # Perform the whiteness test
+        is_white = Q <= k_alpha
+        
+        return s, τ, k_alpha, is_white
+
