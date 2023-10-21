@@ -2,14 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from estimator import Estimator
 
+
 def main():
     sigma = 4
     i = 2000
-    e1 = np.random.normal(0, np.sqrt(sigma), i) # Generate a random signal for testing
+    e1 = np.random.normal(0, np.sqrt(sigma), i)
     tmax = 20  # Maximum lag
     n = 200
     w1c = np.linspace(-np.pi, np.pi, n)  # Frequency vector
-    lambda1c, lag1c, phi1c = est.calculate_autocovariance_and_spectral_density(e1, tmax, w1c)
+    lambda1c, lag1c, phi1c = est.auto_cov_spectra(
+        e1, tmax, w1c, method='MATLAB'
+    )
 
     # Plot autocovariance and spectral density
     plt.figure(figsize=(10, 6))
@@ -29,6 +32,7 @@ def main():
     plt.show()
 
     est.check_white_noise(e1)
+
 
 if __name__ == '__main__':
     est = Estimator()
