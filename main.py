@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from estimator import Estimator
+from estimator import LinearEstimator
 
 
 def main():
@@ -31,9 +31,12 @@ def main():
     plt.tight_layout()
     plt.show()
 
-    est.check_white_noise(e1)
+    # What are the differences in calculating estimated and the theorectical power density spectrum?
+
+    alpha = 0.05
+    s, t, k_alpha = est.whiteness_test(e1, tmax, alpha, method='MATLAB')
 
 
 if __name__ == '__main__':
-    est = Estimator()
+    est = LinearEstimator()
     main()
