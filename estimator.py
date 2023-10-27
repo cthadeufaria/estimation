@@ -22,12 +22,12 @@ class LinearEstimator:
 
             ϕe = self.eng.fft(λe, len(ω))
 
-        else:
+        elif method == 'Python':
             for t in range(-tmax, tmax + 1):
                 if t >= 0:
-                    λe[t + tmax] = np.sum(e[:N - t] * e[t:])  # / (N - t)
+                    λe[t + tmax] = np.sum(e[:N - t] * e[t:]) / (N - t)
                 else:
-                    λe[t + tmax] = np.sum(e[-t:N] * e[:N + t])  # / N
+                    λe[t + tmax] = np.sum(e[-t:N] * e[:N + t]) / N
 
             for w in range(len(ω)):
                 ϕe[w] = np.abs(
@@ -41,7 +41,7 @@ class LinearEstimator:
         return λe, t, ϕe
 
 
-    def whiteness_test_b(self, e, tmax, alpha):
+    def whiteness_test_b(self, e, tmax, alpha):  # Not used
         N = len(e)  # Length of the input signal
 
         # Calculate the normalized autocovariance sequence s(τ)
@@ -70,7 +70,7 @@ class LinearEstimator:
         N = len(e)  # Length of the input signal
 
         if method == 'MATLAB':
-            s = self.eng.xcov(e, tmax, 'normalized')  # Why the output has length (tmax * 2) + 1?
+            s = self.eng.xcov(e, tmax, 'normalized')  # QUESTION: Why the output has length (tmax * 2) + 1 if the formula has summation from t = tmax + 1 to N?
             s = np.array(s).T
 
             t = np.arange(-tmax, tmax + 1)
@@ -84,11 +84,11 @@ class LinearEstimator:
                     e[tmax + 1:N - t] * e[(t + tmax + 1):]
                 ) / (N - tmax)
             
-            s = lambda_e / lambda_e[0]  # Is xcov's output normalized autocovariance sequence already the aforementioned quocient?
+            s = lambda_e / lambda_e[0]  # QUESTION: Is xcov's output normalized autocovariance sequence already the aforementioned quocient?
 
             t = np.arange(0, tmax + 1)
 
-        k_alpha = self.eng.norminv(1 - (alpha / 2))  # What exactly does this functions calculate?
+        k_alpha = self.eng.norminv(1 - (alpha / 2))  # QUESTION: What exactly does this functions calculate?
         
         threshold = k_alpha / np.sqrt(N - tmax)
 

@@ -31,10 +31,10 @@ def main():
     plt.tight_layout()
     plt.show()
 
-    # What are the differences in calculating estimated and the theorectical power density spectrum?
+    # QUESTION: What are the differences in calculating estimated and the theorectical power density spectrum?
 
     alpha = 0.05
-    s, t, k_alpha = est.whiteness_test(e1, tmax, alpha, method='MATLAB')
+    s, t, k_alpha = est.whiteness_test(e1, tmax, alpha, method='Python')
 
 
 if __name__ == '__main__':
